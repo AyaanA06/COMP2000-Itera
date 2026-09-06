@@ -491,6 +491,10 @@ class Bloater extends Zombie {
 
         for (Human human : humans) {
 
+            if (!human.isAlive()) {
+                continue;
+            }
+
             if (human.isInSafePoint()) {
                 continue;
             }
@@ -516,6 +520,10 @@ class Bloater extends Zombie {
             new ArrayList<>();
 
         for (Human human : humans) {
+
+            if (!human.isAlive()) {
+                continue;
+            }
 
             if (human.isInSafePoint()) {
                 continue;
