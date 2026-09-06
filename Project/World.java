@@ -88,6 +88,8 @@ public class World {
             if (
                 character
                 instanceof Zombie
+                &&
+                character.isAlive()
             ) {
 
                 return false;
