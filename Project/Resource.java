@@ -248,9 +248,9 @@ class Food extends Resource {
 
                 human.stamina = 100;
             }
-        }
 
-        quantity--;
+            quantity--;
+        }
     }
 
     @Override
