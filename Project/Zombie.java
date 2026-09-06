@@ -115,6 +115,10 @@ public class Zombie extends Character {
 
         for (Human human : humans) {
 
+            if (!human.isAlive()) {
+                continue;
+            }
+
             if (human.isInSafePoint()) {
                 continue;
             }
