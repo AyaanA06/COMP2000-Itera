@@ -386,10 +386,6 @@ public class Human extends Character {
             chooseRandomDirection();
         }
 
-        position.add(
-            dx,
-            dy
-        );
     }
 
     protected void chooseRandomDirection() {
