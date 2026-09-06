@@ -5,7 +5,7 @@ import java.util.Random;
 /*
  * HUMAN
  */
-class Human extends Character {
+public class Human extends Character {
 
     protected int stamina = 100;
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /*
  * ZOMBIE
  */
-class Zombie extends Character {
+public class Zombie extends Character {
 
     protected double detectionRange = 500;
 
