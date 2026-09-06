@@ -219,6 +219,10 @@ public class Human extends Character {
 
         for (Zombie zombie : zombies) {
 
+            if (!zombie.isAlive()) {
+                continue;
+            }
+
             double distance =
                 position.distanceTo(
                     zombie.getPosition()
