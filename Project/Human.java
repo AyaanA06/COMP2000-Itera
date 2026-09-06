@@ -42,6 +42,8 @@ public class Human extends Character {
             y,
             15
         );
+
+        initialize();
     }
 
     public void initialize() {
