@@ -212,9 +212,9 @@ public class Test extends JPanel {
          * HUMANS
          * =====================================
          *
-         * 19 humans total:
+         * 20 humans total:
          *
-         * 14 Civilians
+         * 15 Civilians
          * 3 Soldiers
          * 2 Medics
          */
@@ -222,7 +222,7 @@ public class Test extends JPanel {
         /*
          * CIVILIANS
          */
-        for (int i = 0; i < 14; i++) {
+        for (int i = 0; i < 15; i++) {
 
             Vector2D spawn =
                 randomHumanPosition();
