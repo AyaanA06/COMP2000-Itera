@@ -9,13 +9,7 @@ public abstract class Character {
     protected Vector2D position;
     protected int size;
 
-    public Character(
-        int health,
-        double speed,
-        double x,
-        double y,
-        int size
-    ) {
+    public Character(int health, double speed, double x, double y, int size) {
 
         this.health = health;
         this.speed = speed;
@@ -29,10 +23,7 @@ public abstract class Character {
 
     public void move(Vector2D direction) {
 
-        position.add(
-            direction.getX() * speed,
-            direction.getY() * speed
-        );
+        position.add(direction.getX() * speed, direction.getY() * speed);
     }
 
     public void takeDamage(int amount) {

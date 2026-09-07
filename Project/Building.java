@@ -5,25 +5,15 @@ public abstract class Building {
 
     protected int capacity;
 
-    protected int x;
-    protected int y;
+    protected int x, y;
 
-    protected int width;
-    protected int height;
+    protected int width, height;
 
     protected String name;
 
-    protected ArrayList<Resource> stock =
-        new ArrayList<>();
+    protected ArrayList<Resource> stock = new ArrayList<>();
 
-    public Building(
-        int capacity,
-        int x,
-        int y,
-        int width,
-        int height,
-        String name
-    ) {
+    public Building(int capacity, int x, int y, int width, int height, String name) {
 
         this.capacity = capacity;
 
@@ -40,15 +30,9 @@ public abstract class Building {
         return true;
     }
 
-    public boolean contains(
-        int objectX,
-        int objectY
-    ) {
+    public boolean contains(int objectX, int objectY) {
 
-        return objectX >= x
-            && objectX <= x + width
-            && objectY >= y
-            && objectY <= y + height;
+        return objectX >= x && objectX <= x + width && objectY >= y && objectY <= y + height;
     }
 
     public Resource loot() {
@@ -60,18 +44,13 @@ public abstract class Building {
         return stock.remove(0);
     }
 
-    public void interact(
-        Human human
-    ) {
+    public void interact(Human human) {
 
-        Resource resource =
-            loot();
+        Resource resource = loot();
 
         if (resource != null) {
 
-            human.inventory.add(
-                resource
-            );
+            human.inventory.add(resource);
         }
     }
 
@@ -97,171 +76,78 @@ public abstract class Building {
 
     public void draw(Graphics g) {
 
-        /*
-         * Building body
-         */
+        /* Building body */
         drawBuildingBody(g);
 
-        /*
-         * Building border
-         */
+        /* Building border */
         g.setColor(Color.BLACK);
 
-        g.drawRect(
-            x,
-            y,
-            width,
-            height
-        );
+        g.drawRect(x, y, width, height);
 
-        /*
-         * Building name
-         */
+        /* Building name */
         g.setColor(Color.BLACK);
 
-        g.setFont(
-            new Font(
-                "Arial",
-                Font.BOLD,
-                14
-            )
-        );
+        g.setFont(new Font("Arial", Font.BOLD, 14));
 
-        g.drawString(
-            name,
-            x + 10,
-            y + 22
-        );
+        g.drawString(name, x + 10, y + 22);
 
-        /*
-         * Display available items
-         */
-        g.setFont(
-            new Font(
-                "Arial",
-                Font.PLAIN,
-                11
-            )
-        );
+        /* Display available items */
+        g.setFont(new Font("Arial", Font.PLAIN, 11));
 
-        g.drawString(
-            "Stock: " + stock.size(),
-            x + 10,
-            y + 42
-        );
+        g.drawString("Stock: " + stock.size(), x + 10, y + 42);
     }
 
-    protected abstract void drawBuildingBody(
-        Graphics g
-    );
+    protected abstract void drawBuildingBody(Graphics g);
 }
 
 
-/*
- * HOSPITAL
- */
+/* HOSPITAL */
 class Hospital extends Building {
 
     public Hospital(int x, int y) {
 
-        super(
-            10,
-            x,
-            y,
-            180,
-            180,
-            "HOSPITAL"
-        );
+        super(10, x, y, 180, 180, "HOSPITAL");
     
-        stock.add(
-            new Medicine(
-                5,
-                20
-            )
-        );
+        stock.add(new Medicine(5, 20));
     }
 
-    public void treat(
-        Character character
-    ) {
+    public void treat(Character character) {
 
         character.health += 20;
 
-        if (
-            character.health > 100
-        ) {
+        if (character.health > 100) {
 
             character.health = 100;
         }
     }
 
     @Override
-    protected void drawBuildingBody(
-        Graphics g
-    ) {
+    protected void drawBuildingBody(Graphics g) {
 
-        g.setColor(
-            new Color(
-                220,
-                255,
-                230
-            )
-        );
+        g.setColor(new Color(220, 255, 230));
 
-        g.fillRect(
-            x,
-            y,
-            width,
-            height
-        );
+        g.fillRect(x, y, width, height);
 
-        /*
-         * Hospital cross
-         */
+        /* Hospital cross */
         g.setColor(Color.RED);
 
-        g.fillRect(
-            x + width - 42,
-            y + 20,
-            12,
-            40
-        );
+        g.fillRect(x + width - 42, y + 20, 12, 40);
 
-        g.fillRect(
-            x + width - 56,
-            y + 34,
-            40,
-            12
-        );
+        g.fillRect(x + width - 56, y + 34, 40, 12);
     }
 }
 
 
-/*
- * POLICE STATION
- */
+/* POLICE STATION */
 class PoliceStation extends Building {
 
-    private ArrayList<Weapon> armory =
-        new ArrayList<>();
+    private ArrayList<Weapon> armory = new ArrayList<>();
 
         public PoliceStation(int x, int y) {
 
-            super(
-                10,
-                x,
-                y,
-                180,
-                180,
-                "POLICE STATION"
-            );
+            super(10, x, y, 180, 180, "POLICE STATION");
         
-            Weapon weapon =
-                new Weapon(
-                    10,
-                    25,
-                    20
-                );
+            Weapon weapon = new Weapon(10, 25, 20);
         
             armory.add(weapon);
             stock.add(weapon);
@@ -277,52 +163,25 @@ class PoliceStation extends Building {
     }
 
     @Override
-    protected void drawBuildingBody(
-        Graphics g
-    ) {
+    protected void drawBuildingBody(Graphics g) {
 
-        g.setColor(
-            new Color(
-                210,
-                225,
-                255
-            )
-        );
+        g.setColor(new Color(210, 225, 255));
 
-        g.fillRect(
-            x,
-            y,
-            width,
-            height
-        );
+        g.fillRect(x, y, width, height);
     }
 }
 
 
-/*
- * CONVENIENCE STORE
- */
+/* CONVENIENCE STORE */
 class ConvenienceStore extends Building {
 
-    private ArrayList<Food> shelves =
-        new ArrayList<>();
+    private ArrayList<Food> shelves = new ArrayList<>();
 
         public ConvenienceStore(int x, int y) {
 
-            super(
-                15,
-                x,
-                y,
-                180,
-                180,
-                "CONVENIENCE STORE"
-            );
+            super(15, x, y, 180, 180, "CONVENIENCE STORE");
         
-            Food food =
-                new Food(
-                    10,
-                    20
-                );
+            Food food = new Food(10, 20);
         
             shelves.add(food);
             stock.add(food);
@@ -338,23 +197,10 @@ class ConvenienceStore extends Building {
     }
 
     @Override
-    protected void drawBuildingBody(
-        Graphics g
-    ) {
+    protected void drawBuildingBody(Graphics g) {
 
-        g.setColor(
-            new Color(
-                255,
-                245,
-                200
-            )
-        );
+        g.setColor(new Color(255, 245, 200));
 
-        g.fillRect(
-            x,
-            y,
-            width,
-            height
-        );
+        g.fillRect(x, y, width, height);
     }
 }
