@@ -1,7 +1,6 @@
 public class Vector2D {
 
-    private double x;
-    private double y;
+    private double x, y;
 
     public Vector2D(double x, double y) {
         this.x = x;
@@ -34,8 +33,6 @@ public class Vector2D {
         double dx = other.x - x;
         double dy = other.y - y;
 
-        return Math.sqrt(
-            dx * dx + dy * dy
-        );
+        return Math.sqrt(dx * dx + dy * dy);
     }
 }

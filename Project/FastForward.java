@@ -5,8 +5,7 @@ public class FastForward extends JPanel {
 
     private int speed = 1;
 
-    private JButton normalButton;
-    private JButton twoTimesButton;
+    private JButton normalButton, twoTimesButton;
     private JButton fiveTimesButton;
 
     public FastForward() {
@@ -24,17 +23,11 @@ public class FastForward extends JPanel {
         add(twoTimesButton);
         add(fiveTimesButton);
 
-        normalButton.addActionListener(e -> {
-            speed = 1;
-        });
+        normalButton.addActionListener(e -> { speed = 1; });
 
-        twoTimesButton.addActionListener(e -> {
-            speed = 2;
-        });
+        twoTimesButton.addActionListener(e -> { speed = 2; });
 
-        fiveTimesButton.addActionListener(e -> {
-            speed = 5;
-        });
+        fiveTimesButton.addActionListener(e -> { speed = 5; });
     }
 
     public int getSpeed() {
