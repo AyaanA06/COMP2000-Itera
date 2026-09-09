@@ -1,7 +1,10 @@
 {
+    "java.project.sourcePaths": [
+        "Project"
+    ],
     "java.project.outputPath": "bin",
     "code-runner.executorMap": {
-        "java": "cd $dir && mkdir -p out && javac -d out *.java && java -cp out $fileNameWithoutExt"
+        "java": "cd \"$workspaceRoot\" && javac -d bin Project/itera/model/*.java Project/itera/simulation/*.java Project/itera/ui/*.java && java -cp bin itera.ui.Test"
     },
     "code-runner.runInTerminal": true
 }

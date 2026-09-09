@@ -1,3 +1,5 @@
+package itera.model;
+
 import java.awt.Graphics;
 import java.util.ArrayList;
 
