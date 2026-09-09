@@ -1,3 +1,5 @@
+package itera.ui;
+
 import itera.model.Bloater;
 import itera.model.Building;
 import itera.model.Character;
@@ -19,7 +21,6 @@ import itera.model.Weapon;
 import itera.model.Zombie;
 import itera.simulation.World;
 import itera.simulation.ZombieWave;
-import itera.ui.FastForward;
 
 import java.awt.*;
 import java.util.ArrayList;
