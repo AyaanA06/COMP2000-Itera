@@ -14,6 +14,11 @@ public class PoliceStation extends Building {
         stock.add(weapon);
     }
 
+    /**
+     * Removes a weapon from the police station's stock.
+     *
+     * @return the next weapon, or {@code null} when none is available
+     */
     public Weapon getWeapon() {
 
         Resource resource = loot();

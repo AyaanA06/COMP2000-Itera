@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
 
-/* HUMAN */
 public class Human extends Character {
 
     protected int stamina = 100;
@@ -224,7 +223,7 @@ public class Human extends Character {
 
             double fleeSpeed = speed;
 
-            /* A tired human moves more slowly * until some stamina is recovered. */
+            /* A tired human moves at half speed until stamina recovers. */
             if (stamina <= 0) {
                 fleeSpeed = speed * 0.5;
             }
@@ -235,7 +234,6 @@ public class Human extends Character {
         }
     }
 
-    /* Reduce stamina while escaping zombies. */
     protected void drainStamina() {
 
         stamina -= STAMINA_DRAIN;
@@ -245,7 +243,6 @@ public class Human extends Character {
         }
     }
 
-    /* Recover stamina when the human * is not actively fleeing. */
     protected void recoverStamina() {
 
         stamina += STAMINA_RECOVERY;
@@ -322,6 +319,13 @@ public class Human extends Character {
         }
     }
 
+    /**
+     * Applies zombie damage when this human is outside the safe point and the
+     * damage cooldown has finished.
+     *
+     * @param damage the amount of health to remove
+     * @return {@code true} when the damage was applied
+     */
     public boolean receiveZombieHit(int damage) {
 
         if (insideSafePoint) {

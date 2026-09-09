@@ -109,19 +109,15 @@ public class SafePoint {
 
         g2.setStroke(new BasicStroke(4));
 
-        /* Top */
+        /* Draw the border with a doorway gap in the right wall. */
         g2.drawLine(x, y, x + width, y);
 
-        /* Left */
         g2.drawLine(x, y, x, y + height);
 
-        /* Bottom */
         g2.drawLine(x, y + height, x + width, y + height);
 
-        /* Right wall above door */
         g2.drawLine(x + width, y, x + width, doorY);
 
-        /* Right wall below door */
         g2.drawLine(x + width, doorY + doorHeight, x + width, y + height);
 
         g2.setStroke(new BasicStroke(1));

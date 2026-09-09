@@ -41,6 +41,11 @@ public abstract class Building {
         return objectX >= x && objectX <= x + width && objectY >= y && objectY <= y + height;
     }
 
+    /**
+     * Removes the next resource from the building's stock.
+     *
+     * @return the next resource, or {@code null} when the stock is empty
+     */
     public Resource loot() {
 
         if (stock.isEmpty()) {
@@ -50,6 +55,11 @@ public abstract class Building {
         return stock.remove(0);
     }
 
+    /**
+     * Gives one stocked resource to a human when an item is available.
+     *
+     * @param human the human receiving the resource
+     */
     public void interact(Human human) {
 
         Resource resource = loot();
@@ -82,22 +92,18 @@ public abstract class Building {
 
     public void draw(Graphics g) {
 
-        /* Building body */
         drawBuildingBody(g);
 
-        /* Building border */
         g.setColor(Color.BLACK);
 
         g.drawRect(x, y, width, height);
 
-        /* Building name */
         g.setColor(Color.BLACK);
 
         g.setFont(new Font("Arial", Font.BOLD, 14));
 
         g.drawString(name, x + 10, y + 22);
 
-        /* Display available items */
         g.setFont(new Font("Arial", Font.PLAIN, 11));
 
         g.drawString("Stock: " + stock.size(), x + 10, y + 42);

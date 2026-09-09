@@ -14,6 +14,11 @@ public class ConvenienceStore extends Building {
         stock.add(food);
     }
 
+    /**
+     * Removes food from the store's stock.
+     *
+     * @return the next food item, or {@code null} when none is available
+     */
     public Food getFood() {
 
         Resource resource = loot();

@@ -26,13 +26,19 @@ public class Weapon extends Resource {
         this.durability = durability;
     }
 
-    /* Checks whether the weapon * currently has ammunition and * enough durability to fire. */
     public boolean canFire() {
 
         return quantity > 0 && durability > 0;
     }
 
-    /* Fire the weapon at a target. Returns true if a shot was successfully fired. */
+    /**
+     * Fires at a target when the weapon is usable. A successful shot consumes
+     * one unit of ammunition and durability.
+     *
+     * @param target the character receiving the weapon damage
+     * @return {@code true} when a shot was fired, or {@code false} when the
+     *         target is null or the weapon cannot fire
+     */
     public boolean fire(Character target) {
 
         if (target == null || !canFire()) {
@@ -61,7 +67,6 @@ public class Weapon extends Resource {
         return durability;
     }
 
-    /* Allows ammunition to be * replenished later. */
     public void addAmmo(int amount) {
 
         if (amount > 0) {
