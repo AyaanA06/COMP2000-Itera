@@ -70,7 +70,9 @@ public class SafePoint {
 
         boolean atDoor = centreY >= doorY && centreY <= doorY + doorHeight;
 
-        if (allowedToEnter && atDoor) {
+        boolean approachingFromRight = currentX >= x + width && nextX < currentX;
+
+        if (allowedToEnter && atDoor && approachingFromRight) {
 
             return false;
         }
