@@ -5,14 +5,14 @@ import java.awt.Graphics;
 
 public class ConvenienceStore extends Building {
 
-        public ConvenienceStore(int x, int y) {
+    public ConvenienceStore(int x, int y) {
 
-            super(15, x, y, 180, 180, "CONVENIENCE STORE");
+        super(15, x, y, 180, 180, "CONVENIENCE STORE");
 
-            Food food = new Food(10, 20);
+        Food food = new Food(10, 20);
 
-            stock.add(food);
-        }
+        stock.add(food);
+    }
 
     public Food getFood() {
 

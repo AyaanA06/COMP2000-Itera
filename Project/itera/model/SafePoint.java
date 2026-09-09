@@ -1,17 +1,25 @@
 package itera.model;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.Random;
 
 public class SafePoint {
 
-    private int defenseLevel, capacity;
+    private int defenseLevel;
+    private int capacity;
 
-    private int x, y;
+    private int x;
+    private int y;
 
-    private int width, height;
+    private int width;
+    private int height;
 
-    private int doorY, doorHeight;
+    private int doorY;
+    private int doorHeight;
 
     public SafePoint(int x, int y, int width, int height, int capacity) {
 

@@ -1,15 +1,19 @@
 package itera.model;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 public abstract class Building {
 
     protected int capacity;
 
-    protected int x, y;
+    protected int x;
+    protected int y;
 
-    protected int width, height;
+    protected int width;
+    protected int height;
 
     protected String name;
 

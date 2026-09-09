@@ -5,7 +5,8 @@ import java.awt.Graphics;
 
 public class Weapon extends Resource {
 
-    private int damage, durability;
+    private int damage;
+    private int durability;
 
     public Weapon(int quantity, int damage, int durability) {
 

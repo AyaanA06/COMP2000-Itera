@@ -1,8 +1,6 @@
 package itera.model;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Random;
+import java.awt.Graphics;
 
 public abstract class Character {
 

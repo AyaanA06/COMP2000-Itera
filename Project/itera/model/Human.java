@@ -1,6 +1,8 @@
 package itera.model;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -29,8 +31,10 @@ public class Human extends Character {
 
     protected Random random = new Random();
 
-    protected double dx, dy;
+    protected double dx;
+    protected double dy;
 
+    @SuppressWarnings("this-escape")
     public Human(int x, int y) {
 
         super(100, NORMAL_SPEED, x, y, 15);

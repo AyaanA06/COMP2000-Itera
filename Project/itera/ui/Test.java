@@ -22,11 +22,21 @@ import itera.model.Zombie;
 import itera.simulation.World;
 import itera.simulation.ZombieWave;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
+@SuppressWarnings({"serial", "this-escape"})
 public class Test extends JPanel {
 
     private static final int WORLD_WIDTH = 1200;
@@ -166,12 +176,12 @@ public class Test extends JPanel {
         /* TIMER */
         timer = new Timer(30, e -> {
 
-                    timer.setDelay(fastForward.getDelay());
+            timer.setDelay(fastForward.getDelay());
 
-                    updateSimulation();
+            updateSimulation();
 
-                    repaint();
-            });
+            repaint();
+        });
     }
 
     /* RANDOM HUMAN SPAWN */
@@ -461,40 +471,40 @@ public class Test extends JPanel {
 
         SwingUtilities.invokeLater(() -> {
 
-                try {
+            try {
 
-                    JFrame frame = new JFrame("Zombie Survival Simulation");
+                JFrame frame = new JFrame("Zombie Survival Simulation");
 
-                    Test simulation = new Test();
+                Test simulation = new Test();
 
-                    /* Main JFrame layout */
-                    frame.setLayout(new BorderLayout());
+                /* Main JFrame layout */
+                frame.setLayout(new BorderLayout());
 
-                    /* Simulation in centre */
-                    frame.add(simulation, BorderLayout.CENTER);
+                /* Simulation in centre */
+                frame.add(simulation, BorderLayout.CENTER);
 
-                    /* Fast Forward controls * at the bottom. */
-                    frame.add(simulation.getFastForward(), BorderLayout.SOUTH);
+                /* Fast Forward controls * at the bottom. */
+                frame.add(simulation.getFastForward(), BorderLayout.SOUTH);
 
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                    /* Use preferred JPanel size. */
-                    frame.pack();
+                /* Use preferred JPanel size. */
+                frame.pack();
 
-                    frame.setLocationRelativeTo(null);
+                frame.setLocationRelativeTo(null);
 
-                    /* Window must become visible * before simulation begins. */
-                    frame.setVisible(true);
+                /* Window must become visible * before simulation begins. */
+                frame.setVisible(true);
 
-                    simulation.startSimulation();
+                simulation.startSimulation();
 
-                } catch (RuntimeException exception) {
+            } catch (RuntimeException exception) {
 
-                    /* Show readable startup error. */
-                    JOptionPane.showMessageDialog(null, "The simulation could not start:\n" + exception.getMessage(), "Simulation Error", JOptionPane.ERROR_MESSAGE);
+                /* Show readable startup error. */
+                JOptionPane.showMessageDialog(null, "The simulation could not start:\n" + exception.getMessage(), "Simulation Error", JOptionPane.ERROR_MESSAGE);
 
-                    exception.printStackTrace();
-                }
+                exception.printStackTrace();
+            }
         });
     }
 }

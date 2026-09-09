@@ -1,13 +1,17 @@
 package itera.ui;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.FlowLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
+@SuppressWarnings({"serial", "this-escape"})
 public class FastForward extends JPanel {
 
     private int speed = 1;
 
-    private JButton normalButton, twoTimesButton;
+    private JButton normalButton;
+    private JButton twoTimesButton;
     private JButton fiveTimesButton;
 
     public FastForward() {
