@@ -1,3 +1,10 @@
+import itera.model.Building;
+import itera.model.Character;
+import itera.model.Human;
+import itera.model.Resource;
+import itera.model.SafePoint;
+import itera.model.Zombie;
+
 import java.util.ArrayList;
 
 public class World {

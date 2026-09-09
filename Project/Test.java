@@ -1,3 +1,23 @@
+import itera.model.Bloater;
+import itera.model.Building;
+import itera.model.Character;
+import itera.model.Civilian;
+import itera.model.ConvenienceStore;
+import itera.model.Food;
+import itera.model.Hospital;
+import itera.model.Human;
+import itera.model.Medic;
+import itera.model.Medicine;
+import itera.model.PoliceStation;
+import itera.model.Resource;
+import itera.model.Runner;
+import itera.model.SafePoint;
+import itera.model.Soldier;
+import itera.model.Stalker;
+import itera.model.Vector2D;
+import itera.model.Weapon;
+import itera.model.Zombie;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;

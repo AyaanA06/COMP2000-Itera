@@ -1,3 +1,5 @@
+package itera.model;
+
 public class Vector2D {
 
     private double x, y;

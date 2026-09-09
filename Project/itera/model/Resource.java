@@ -1,3 +1,5 @@
+package itera.model;
+
 import java.awt.*;
 
 public abstract class Resource {

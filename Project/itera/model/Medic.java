@@ -1,3 +1,5 @@
+package itera.model;
+
 import java.awt.Graphics;
 
 public class Medic extends Human {
