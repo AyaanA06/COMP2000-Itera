@@ -5,15 +5,20 @@ import java.awt.Graphics;
 
 public class PoliceStation extends Building {
 
-        public PoliceStation(int x, int y) {
+    public PoliceStation(int x, int y) {
 
-            super(10, x, y, 180, 180, "POLICE STATION");
+        super(10, x, y, 180, 180, "POLICE STATION");
 
-            Weapon weapon = new Weapon(10, 25, 20);
+        Weapon weapon = new Weapon(10, 25, 20);
 
-            stock.add(weapon);
-        }
+        stock.add(weapon);
+    }
 
+    /**
+     * Removes a weapon from the police station's stock.
+     *
+     * @return the next weapon, or {@code null} when none is available
+     */
     public Weapon getWeapon() {
 
         Resource resource = loot();

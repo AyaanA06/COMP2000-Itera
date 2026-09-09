@@ -39,6 +39,13 @@ public class Bloater extends Zombie {
         return false;
     }
 
+    /**
+     * Damages living humans within range, ignores humans in the safe point,
+     * and then defeats this bloater.
+     *
+     * @param humans the humans currently in the simulation
+     * @return the humans killed by the explosion
+     */
     public ArrayList<Human> explode(ArrayList<Human> humans) {
         ArrayList<Human> killedHumans = new ArrayList<>();
 

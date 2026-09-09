@@ -1,12 +1,13 @@
 package itera.model;
 
-import java.awt.*;
+import java.awt.Graphics;
 
 public abstract class Resource {
 
     protected int quantity;
 
-    protected int x, y;
+    protected int x;
+    protected int y;
 
     protected int size = 14;
 

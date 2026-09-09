@@ -1,9 +1,10 @@
 package itera.model;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
-/* ZOMBIE */
 public class Zombie extends Character {
 
     protected double detectionRange = 500;
@@ -17,6 +18,16 @@ public class Zombie extends Character {
         super(100, 1.5, x, y, 18);
     }
 
+    /**
+     * Moves towards or attacks the nearest eligible human for one simulation step.
+     *
+     * @param worldWidth the width of the simulation area
+     * @param worldHeight the height of the simulation area
+     * @param humans the humans available as possible targets
+     * @param safePoint the protected area that this zombie cannot enter
+     * @return the human killed by this zombie's direct attack, or {@code null}
+     *         if no human died
+     */
     public Human update(int worldWidth, int worldHeight, ArrayList<Human> humans, SafePoint safePoint) {
 
         if (!isAlive()) {

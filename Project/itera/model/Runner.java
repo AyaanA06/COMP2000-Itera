@@ -15,6 +15,7 @@ public class Runner extends Zombie {
     private long burstEndTime = 0;
     private long lastBurstTime = 0;
 
+    @SuppressWarnings("this-escape")
     public Runner(int x, int y) {
         super(x, y);
         sprint();
