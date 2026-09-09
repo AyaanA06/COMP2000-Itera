@@ -1,3 +1,5 @@
+package itera.simulation;
+
 import itera.model.Bloater;
 import itera.model.Runner;
 import itera.model.Stalker;

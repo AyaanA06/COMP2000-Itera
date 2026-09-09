@@ -17,6 +17,8 @@ import itera.model.Stalker;
 import itera.model.Vector2D;
 import itera.model.Weapon;
 import itera.model.Zombie;
+import itera.simulation.World;
+import itera.simulation.ZombieWave;
 
 import java.awt.*;
 import java.util.ArrayList;

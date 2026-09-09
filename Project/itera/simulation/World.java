@@ -1,3 +1,5 @@
+package itera.simulation;
+
 import itera.model.Building;
 import itera.model.Character;
 import itera.model.Human;
