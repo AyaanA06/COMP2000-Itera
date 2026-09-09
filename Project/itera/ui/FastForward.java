@@ -1,3 +1,5 @@
+package itera.ui;
+
 import java.awt.*;
 import javax.swing.*;
 
