@@ -47,11 +47,15 @@ public class Human extends Character {
         }
     }
 
+    public void addResource(Resource resource) {
+        inventory.add(resource);
+    }
+
     public void interact(Object object) {
 
         if (object instanceof Resource resource) {
 
-            inventory.add(resource);
+            addResource(resource);
 
         } else if (object instanceof Building building) {
 

@@ -242,7 +242,7 @@ public class Test extends JPanel {
 
                 if (!resource.isCollected() && resource.isNear(human)) {
 
-                    human.inventory.add(resource);
+                    human.addResource(resource);
 
                     resource.collect();
                 }

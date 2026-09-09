@@ -50,7 +50,7 @@ public abstract class Building {
 
         if (resource != null) {
 
-            human.inventory.add(resource);
+            human.addResource(resource);
         }
     }
 
