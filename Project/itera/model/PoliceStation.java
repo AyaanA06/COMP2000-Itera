@@ -2,11 +2,8 @@ package itera.model;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
 
 public class PoliceStation extends Building {
-
-    private ArrayList<Weapon> armory = new ArrayList<>();
 
         public PoliceStation(int x, int y) {
 
@@ -14,17 +11,18 @@ public class PoliceStation extends Building {
 
             Weapon weapon = new Weapon(10, 25, 20);
 
-            armory.add(weapon);
             stock.add(weapon);
         }
 
     public Weapon getWeapon() {
 
-        if (armory.isEmpty()) {
-            return null;
+        Resource resource = loot();
+
+        if (resource instanceof Weapon weapon) {
+            return weapon;
         }
 
-        return armory.remove(0);
+        return null;
     }
 
     @Override
