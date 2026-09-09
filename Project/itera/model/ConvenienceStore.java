@@ -2,11 +2,8 @@ package itera.model;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
 
 public class ConvenienceStore extends Building {
-
-    private ArrayList<Food> shelves = new ArrayList<>();
 
         public ConvenienceStore(int x, int y) {
 
@@ -14,17 +11,18 @@ public class ConvenienceStore extends Building {
 
             Food food = new Food(10, 20);
 
-            shelves.add(food);
             stock.add(food);
         }
 
     public Food getFood() {
 
-        if (shelves.isEmpty()) {
-            return null;
+        Resource resource = loot();
+
+        if (resource instanceof Food food) {
+            return food;
         }
 
-        return shelves.remove(0);
+        return null;
     }
 
     @Override

@@ -55,9 +55,11 @@ public class Human extends Character {
 
     public void interact(Object object) {
 
-        if (object instanceof Resource resource) {
+        if (object instanceof Resource resource && !resource.isCollected()) {
 
             addResource(resource);
+
+            resource.collect();
 
         } else if (object instanceof Building building) {
 

@@ -35,6 +35,10 @@ public class Zombie extends Character {
 
         double distance = position.distanceTo(target.getPosition());
 
+        if (distance > detectionRange) {
+            return null;
+        }
+
         if (distance <= ATTACK_DISTANCE) {
 
             boolean attacked = performAttack(target);
@@ -47,6 +51,10 @@ public class Zombie extends Character {
             return null;
         }
 
+        double previousX = position.getX();
+
+        double previousY = position.getY();
+
         chase(target);
 
         double nextX = position.getX();
@@ -54,6 +62,10 @@ public class Zombie extends Character {
         double nextY = position.getY();
 
         if (safePoint.wouldZombieEnter(nextX, nextY, size)) {
+
+            position.setX(previousX);
+
+            position.setY(previousY);
 
             return null;
         }
