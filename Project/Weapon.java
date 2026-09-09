@@ -1,0 +1,89 @@
+import java.awt.Color;
+import java.awt.Graphics;
+
+public class Weapon extends Resource {
+
+    private int damage, durability;
+
+    public Weapon(int quantity, int damage, int durability) {
+
+        super(quantity);
+
+        this.damage = damage;
+
+        this.durability = durability;
+    }
+
+    public Weapon(int quantity, int damage, int durability, int x, int y) {
+
+        super(quantity, x, y);
+
+        this.damage = damage;
+
+        this.durability = durability;
+    }
+
+    /* Checks whether the weapon * currently has ammunition and * enough durability to fire. */
+    public boolean canFire() {
+
+        return quantity > 0 && durability > 0;
+    }
+
+    /* Fire the weapon at a target. Returns true if a shot was successfully fired. */
+    public boolean fire(Character target) {
+
+        if (target == null || !canFire()) {
+
+            return false;
+        }
+
+        target.takeDamage(damage);
+
+        durability--;
+
+        quantity--;
+
+        return true;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getAmmo() {
+        return quantity;
+    }
+
+    public int getDurability() {
+        return durability;
+    }
+
+    /* Allows ammunition to be * replenished later. */
+    public void addAmmo(int amount) {
+
+        if (amount > 0) {
+
+            quantity += amount;
+        }
+    }
+
+    @Override
+    public void use(Character target) {
+
+        fire(target);
+    }
+
+    @Override
+    public void draw(Graphics g) {
+
+        if (collected) {
+            return;
+        }
+
+        g.setColor(Color.DARK_GRAY);
+
+        g.fillRect(x, y, 18, 6);
+
+        g.fillRect(x + 10, y + 5, 5, 8);
+    }
+}
