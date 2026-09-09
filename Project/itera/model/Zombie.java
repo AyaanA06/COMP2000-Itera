@@ -35,6 +35,10 @@ public class Zombie extends Character {
 
         double distance = position.distanceTo(target.getPosition());
 
+        if (distance > detectionRange) {
+            return null;
+        }
+
         if (distance <= ATTACK_DISTANCE) {
 
             boolean attacked = performAttack(target);
