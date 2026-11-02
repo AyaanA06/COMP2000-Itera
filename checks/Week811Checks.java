@@ -185,6 +185,79 @@ public final class Week811Checks {
             () -> threatWorld.countZombiesNearSafePoint(null, 150)
         );
 
+        // NEW: Live Zombie Type Breakdown regression tests.
+        World typeWorld = new World();
+        Map<String, Long> emptyTypeCounts = typeWorld.getLivingZombieTypeCounts();
+
+        check(new ArrayList<>(emptyTypeCounts.keySet()).equals(
+                List.of("Standard", "Runner", "Stalker", "Bloater", "Boss")),
+            "Zombie breakdown includes every type in display order");
+
+        check(emptyTypeCounts.values().stream().allMatch(count -> count == 0L),
+            "Empty world shows zero for all zombie types");
+
+        rejects(UnsupportedOperationException.class,
+            () -> emptyTypeCounts.put("Runner", 99L));
+
+        Zombie typeStandard = new Zombie(10, 10);
+        Runner typeRunner = new Runner(20, 20);
+        Stalker typeStalker = new Stalker(30, 30);
+        Bloater typeBloater = new Bloater(40, 40);
+
+        typeWorld.addCharacter(typeStandard);
+        typeWorld.addCharacter(typeRunner);
+        typeWorld.addCharacter(typeStalker);
+        typeWorld.addCharacter(typeBloater);
+        typeWorld.addCharacter(new Civilian(50, 50));
+
+        // Use the real boss-wave spawning path to create a Mutant Boss.
+        ZombieWave typeBossWave = new ZombieWave(1, true, Runner::new);
+        typeBossWave.addSpawnPoint(new Vector2D(60, 60));
+        typeWorld.spawnWave(typeBossWave);
+
+        Map<String, Long> mixedTypeCounts = typeWorld.getLivingZombieTypeCounts();
+
+        check(mixedTypeCounts.get("Standard") == 1L,
+            "Counts standard zombies");
+
+        check(mixedTypeCounts.get("Runner") == 1L,
+            "Counts runners");
+
+        check(mixedTypeCounts.get("Stalker") == 1L,
+            "Counts stalkers");
+
+        check(mixedTypeCounts.get("Bloater") == 1L,
+            "Counts bloaters");
+
+        check(mixedTypeCounts.get("Boss") == 1L,
+            "Counts mutant bosses separately");
+
+        check(mixedTypeCounts.values().stream().mapToLong(Long::longValue).sum() == 5L,
+            "Breakdown totals only the five living zombies, not humans");
+
+        typeStandard.takeDamage(10000);
+
+        check(typeWorld.getLivingZombieTypeCounts().get("Standard") == 0L,
+            "Dead standard zombie excluded before cleanup");
+
+        check(mixedTypeCounts.get("Standard") == 1L,
+            "Previous type-count snapshot stays unchanged");
+
+        typeWorld.update();
+
+        check(typeWorld.getLivingZombieTypeCounts().get("Standard") == 0L,
+            "Dead standard zombie remains excluded after cleanup");
+
+        typeWorld.addCharacter(new Runner(70, 70));
+
+        check(typeWorld.getLivingZombieTypeCounts().get("Runner") == 2L,
+            "Newly spawned runner increases the live count");
+
+        typeRunner.takeDamage(10000);
+
+        check(typeWorld.getLivingZombieTypeCounts().get("Runner") == 1L,
+            "Eliminated runner decreases the live count");
+
         PopulationSnapshot snapshot = world.populationSnapshot();
         check(snapshot.getRoles().get("Soldier").count() == 1, "Dead soldier excluded");
         check(snapshot.getRoles().get("Medic").wounded() == 1, "Wounded count");
@@ -263,6 +336,21 @@ public final class Week811Checks {
 
                 check(uiWorld.getHumans().size() == 20 && uiWorld.getZombies().size() == 10, "Default population unchanged");
 
+                // NEW: Live Zombie Type Breakdown UI tests.
+                var typeLabelField = Main.class.getDeclaredField("zombieTypeSummary");
+                typeLabelField.setAccessible(true);
+                JLabel typeLabel = (JLabel) typeLabelField.get(simulation);
+
+                check(typeLabel.getParent() != null,
+                    "Zombie type summary is attached to the controls");
+
+                check(typeLabel.getText().contains("Standard: 3")
+                        && typeLabel.getText().contains("Runner: 3")
+                        && typeLabel.getText().contains("Stalker: 2")
+                        && typeLabel.getText().contains("Bloater: 2")
+                        && typeLabel.getText().contains("Boss: 0"),
+                    "Initial UI breakdown matches the ten rotating zombie spawns");
+
                 // Boss Wave Early Warning regression tests.
                 var bossWarning = Main.class.getDeclaredMethod(
                     "isBossWaveIncoming", int.class, long.class
@@ -333,6 +421,24 @@ public final class Week811Checks {
                 var label = Main.class.getDeclaredField("populationSummary");
                 label.setAccessible(true);
                 check(((JLabel) label.get(simulation)).getText().contains("wounded"), "Live summary refreshed");
+
+                // NEW: Verify live UI counts after a spawn and an elimination.
+                var refresh = Main.class.getDeclaredMethod("refreshPopulationSummary");
+                refresh.setAccessible(true);
+                long runnerCountBeforeSpawn = uiWorld.getLivingZombieTypeCounts().get("Runner");
+
+                Runner extraRunner = new Runner(600, 400);
+                uiWorld.addCharacter(extraRunner);
+                refresh.invoke(simulation);
+
+                check(typeLabel.getText().contains("Runner: " + (runnerCountBeforeSpawn + 1)),
+                    "UI reflects a newly spawned runner");
+
+                extraRunner.takeDamage(10000);
+                refresh.invoke(simulation);
+
+                check(typeLabel.getText().contains("Runner: " + runnerCountBeforeSpawn),
+                    "UI excludes an eliminated runner immediately");
 
                 var graphics = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_RGB).createGraphics();
                 simulation.paint(graphics);
