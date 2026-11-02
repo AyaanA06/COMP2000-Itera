@@ -87,7 +87,7 @@ public class World {
     }
 
     /**
-     * NEW: Update Mutant Boss special abilities.
+     * Update Mutant Boss special abilities.
      *
      * Ground Smash:
      * The boss warns nearby humans before dealing area damage.
@@ -214,7 +214,7 @@ public class World {
     }
 
     /**
-     * NEW FEATURE: Safe Zone Threat Detection.
+     * Safe Zone Threat Detection.
      *
      * Counts living zombies inside or near the Safe Zone.
      * The radius creates a rectangular detection buffer
@@ -252,5 +252,81 @@ public class World {
             Zombie.class,
             zombie -> true
         );
+    }
+
+    /**
+     * Live Zombie Type Breakdown.
+     *
+     * Uses Java Streams to group living zombies by type.
+     * Dead zombies are excluded.
+     *
+     * Returns a snapshot with every supported zombie type,
+     * including types that currently have zero living zombies.
+     */
+    public Map<String, Long> getLivingZombieTypeCounts() {
+
+        Map<String, Long> totals = getZombies().stream()
+            .filter(Zombie::isAlive)
+            .collect(Collectors.groupingBy(
+                World::zombieTypeLabel,
+                Collectors.counting()
+            ));
+
+        // Maintain a consistent order for the interface.
+        Map<String, Long> counts = new LinkedHashMap<>();
+
+        counts.put(
+            "Standard",
+            totals.getOrDefault("Standard", 0L)
+        );
+
+        counts.put(
+            "Runner",
+            totals.getOrDefault("Runner", 0L)
+        );
+
+        counts.put(
+            "Stalker",
+            totals.getOrDefault("Stalker", 0L)
+        );
+
+        counts.put(
+            "Bloater",
+            totals.getOrDefault("Bloater", 0L)
+        );
+
+        counts.put(
+            "Boss",
+            totals.getOrDefault("Boss", 0L)
+        );
+
+        return Collections.unmodifiableMap(counts);
+    }
+
+    /**
+     * Identify the correct zombie type.
+     *
+     * Bosses and specialised zombies are checked
+     * before falling back to the standard zombie type.
+     */
+    private static String zombieTypeLabel(Zombie zombie) {
+
+        if (zombie instanceof MutantBoss) {
+            return "Boss";
+        }
+
+        if (zombie instanceof Runner) {
+            return "Runner";
+        }
+
+        if (zombie instanceof Stalker) {
+            return "Stalker";
+        }
+
+        if (zombie instanceof Bloater) {
+            return "Bloater";
+        }
+
+        return "Standard";
     }
 }

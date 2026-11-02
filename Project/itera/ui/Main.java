@@ -51,6 +51,10 @@ public class Main extends JPanel {
     private final JLabel safeZoneThreat =
         new JLabel("Safe Zone: SAFE (0 nearby)", SwingConstants.CENTER);
 
+    // NEW: Live zombie type breakdown.
+    private final JLabel zombieTypeSummary =
+        new JLabel("Zombie Types: Loading...", SwingConstants.CENTER);
+
     private void refreshPopulationSummary() {
 
         String summary = world.populationSnapshot()
@@ -94,6 +98,23 @@ public class Main extends JPanel {
             );
             safeZoneThreat.setForeground(new Color(183, 28, 28));
         }
+
+        // NEW: Count the living zombies in each category.
+        Map<String, Long> typeCounts =
+            world.getLivingZombieTypeCounts();
+
+        String breakdown = typeCounts.entrySet()
+            .stream()
+            .map(entry ->
+                entry.getKey() + ": " + entry.getValue()
+            )
+            .collect(
+                java.util.stream.Collectors.joining("   |   ")
+            );
+
+        zombieTypeSummary.setText(
+            "Zombie Types  |  " + breakdown
+        );
     }
 
     public Main() {
@@ -780,11 +801,12 @@ public class Main extends JPanel {
             BorderLayout.NORTH
         );
 
-        // Display population and threat status.
-        JPanel liveStatus = new JPanel(new GridLayout(2, 1));
+        // Display population, Safe Zone threat, and zombie types.
+        JPanel liveStatus = new JPanel(new GridLayout(3, 1));
 
         liveStatus.add(populationSummary);
         liveStatus.add(safeZoneThreat);
+        liveStatus.add(zombieTypeSummary);
 
         controls.add(
             liveStatus,
