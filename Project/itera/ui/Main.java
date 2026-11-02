@@ -33,6 +33,9 @@ public class Main extends JPanel {
     private final JButton pauseButton;
     private final SimulationSettings settings;
 
+    // Live tactical radar beside the scrollable battlefield.
+    private TacticalMiniMap tacticalMiniMap;
+
     private final ArrayList<Building> buildings =
         new ArrayList<>();
 
@@ -51,7 +54,6 @@ public class Main extends JPanel {
     private final JLabel safeZoneThreat =
         new JLabel("Safe Zone: SAFE (0 nearby)", SwingConstants.CENTER);
 
-    // NEW: Live zombie type breakdown.
     private final JLabel zombieTypeSummary =
         new JLabel("Zombie Types: Loading...", SwingConstants.CENTER);
 
@@ -99,22 +101,15 @@ public class Main extends JPanel {
             safeZoneThreat.setForeground(new Color(183, 28, 28));
         }
 
-        // NEW: Count the living zombies in each category.
-        Map<String, Long> typeCounts =
-            world.getLivingZombieTypeCounts();
+        // Show the current number of living zombies by type.
+        Map<String, Long> typeCounts = world.getLivingZombieTypeCounts();
 
         String breakdown = typeCounts.entrySet()
             .stream()
-            .map(entry ->
-                entry.getKey() + ": " + entry.getValue()
-            )
-            .collect(
-                java.util.stream.Collectors.joining("   |   ")
-            );
+            .map(entry -> entry.getKey() + ": " + entry.getValue())
+            .collect(java.util.stream.Collectors.joining("   |   "));
 
-        zombieTypeSummary.setText(
-            "Zombie Types  |  " + breakdown
-        );
+        zombieTypeSummary.setText("Zombie Types  |  " + breakdown);
     }
 
     public Main() {
@@ -597,6 +592,11 @@ public class Main extends JPanel {
 
         // REFRESH POPULATION INFORMATION
         refreshPopulationSummary();
+
+        // Refresh the tactical radar after each simulation update.
+        if (tacticalMiniMap != null) {
+            tacticalMiniMap.refresh();
+        }
 
         // END CONDITION
         if (world.getHumans().isEmpty()) {
@@ -1145,8 +1145,9 @@ public class Main extends JPanel {
         JScrollPane scrollPane =
             new JScrollPane(simulation);
 
+        // Leave room on the right for the tactical mini-map.
         scrollPane.setPreferredSize(
-            new Dimension(1100, 600)
+            new Dimension(900, 600)
         );
 
         scrollPane.setHorizontalScrollBarPolicy(
@@ -1160,6 +1161,50 @@ public class Main extends JPanel {
         frame.add(
             scrollPane,
             BorderLayout.CENTER
+        );
+
+        // Interactive tactical radar:
+        // stays visible while scrolling the battlefield.
+        simulation.tacticalMiniMap = new TacticalMiniMap(
+            simulation.world,
+            scrollPane,
+            WORLD_WIDTH,
+            WORLD_HEIGHT,
+            new Rectangle(
+                0,
+                0,
+                BUILDING_SIZE,
+                BUILDING_SIZE
+            ),
+            java.util.List.of(
+                new Rectangle(
+                    WORLD_WIDTH - BUILDING_SIZE,
+                    0,
+                    BUILDING_SIZE,
+                    BUILDING_SIZE
+                ),
+                new Rectangle(
+                    0,
+                    WORLD_HEIGHT
+                        - BUILDING_SIZE
+                        - BOTTOM_BUILDING_OFFSET,
+                    BUILDING_SIZE,
+                    BUILDING_SIZE
+                ),
+                new Rectangle(
+                    WORLD_WIDTH - BUILDING_SIZE,
+                    WORLD_HEIGHT
+                        - BUILDING_SIZE
+                        - BOTTOM_BUILDING_OFFSET,
+                    BUILDING_SIZE,
+                    BUILDING_SIZE
+                )
+            )
+        );
+
+        frame.add(
+            simulation.tacticalMiniMap,
+            BorderLayout.EAST
         );
 
         // CONTROLS BELOW GAME
