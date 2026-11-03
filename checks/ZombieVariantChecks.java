@@ -72,6 +72,16 @@ public final class ZombieVariantChecks {
         check(runner.getTargetingStrategy().chooseTarget(runner, List.of(closeSoldier)).orElseThrow() == closeSoldier,
             "Runner falls back to the nearest human");
 
+        // Weakest human first
+        WeakestTarget weakest = new WeakestTarget();
+        Civilian healthy = new Civilian(10, 0);
+        Soldier wounded = injured(new Soldier(300, 0), 60);
+        check(weakest.chooseTarget(hunter, List.of(healthy, wounded)).orElseThrow() == wounded, "Lowest health beats distance");
+        Soldier woundedNear = injured(new Soldier(100, 0), 60);
+        check(weakest.chooseTarget(hunter, List.of(wounded, woundedNear)).orElseThrow() == woundedNear, "Health tie uses distance");
+        Civilian dying = injured(new Civilian(1, 0), 100);
+        check(weakest.chooseTarget(hunter, List.of(dying, healthy)).orElseThrow() == healthy, "Dead humans are not the weakest");
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }
