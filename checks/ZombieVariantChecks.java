@@ -5,7 +5,9 @@ import itera.model.human.*;
 import itera.model.zombie.*;
 import itera.model.zombie.targeting.*;
 import itera.simulation.*;
+import itera.ui.Main;
 import java.util.*;
+import javax.swing.SwingUtilities;
 
 /** Standalone checks for zombie types and how they choose targets. */
 public final class ZombieVariantChecks {
@@ -30,7 +32,7 @@ public final class ZombieVariantChecks {
         return human;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // Nearest targeting (the original behaviour)
         Zombie zombie = new Zombie(0, 0);
         Civilian near = new Civilian(30, 0);
@@ -221,6 +223,30 @@ public final class ZombieVariantChecks {
             "Plain and boss waves have no featured type");
         rejects(NullPointerException.class, () -> ZombieWave.featuring(3, null, new Random()));
         rejects(IllegalArgumentException.class, () -> ZombieWave.featuring(-1, ZombieType.BRUTE, new Random()));
+
+        // The simulation uses the rotation for its timed waves
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                Main simulation = new Main(new SimulationSettings(20, 10));
+                var worldField = Main.class.getDeclaredField("world");
+                var featuredField = Main.class.getDeclaredField("featuredType");
+                var nextWave = Main.class.getDeclaredMethod("updateTimedWaves");
+                worldField.setAccessible(true);
+                featuredField.setAccessible(true);
+                nextWave.setAccessible(true);
+                World simWorld = (World) worldField.get(simulation);
+
+                check(featuredField.get(simulation) == null, "The opening wave has no featured type");
+                for (int wave = 2; wave <= 5; wave++) {
+                    simWorld.advanceTime(15_000);
+                    nextWave.invoke(simulation);
+                    check(featuredField.get(simulation) == WaveRotation.featuredFor(wave).orElse(null),
+                        "Wave " + wave + " uses the rotation");
+                }
+            } catch (ReflectiveOperationException error) {
+                throw new AssertionError(error);
+            }
+        });
 
         System.out.println("Passed " + checks + " zombie variant checks.");
     }

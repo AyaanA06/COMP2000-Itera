@@ -48,6 +48,9 @@ public class Main extends JPanel {
     private long lastWaveTime;
     private int waveNumber = 1;
 
+    // Zombie type leading the current wave, or null for the first and boss waves.
+    private ZombieType featuredType;
+
     private final JLabel populationSummary =
         new JLabel(" ", SwingConstants.CENTER);
 
@@ -383,7 +386,7 @@ public class Main extends JPanel {
         waveNumber++;
 
         boolean bossWave =
-            waveNumber % 5 == 0;
+            WaveRotation.isBossWave(waveNumber);
 
         ZombieWave wave;
 
@@ -401,11 +404,15 @@ public class Main extends JPanel {
                     + (waveNumber - 1)
                     * ZOMBIES_ADDED_PER_WAVE;
 
-            wave = new ZombieWave(
+            // Each normal wave is led by a different zombie type.
+            wave = ZombieWave.featuring(
                 zombiesThisWave,
-                false
+                WaveRotation.featuredFor(waveNumber).orElseThrow(),
+                random
             );
         }
+
+        featuredType = wave.getFeaturedType().orElse(null);
 
         // SPAWN POINTS
         wave.addSpawnPoint(
