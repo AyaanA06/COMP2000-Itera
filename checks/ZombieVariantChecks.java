@@ -243,6 +243,11 @@ public final class ZombieVariantChecks {
                     check(featuredField.get(simulation) == WaveRotation.featuredFor(wave).orElse(null),
                         "Wave " + wave + " uses the rotation");
                 }
+
+                var waveLabel = Main.class.getDeclaredMethod("waveLabel", int.class, ZombieType.class);
+                waveLabel.setAccessible(true);
+                check("Wave: 3 (Stalker wave)".equals(waveLabel.invoke(null, 3, ZombieType.STALKER)), "HUD names the featured type");
+                check("Wave: 5".equals(waveLabel.invoke(null, 5, null)), "Boss waves show just the number");
             } catch (ReflectiveOperationException error) {
                 throw new AssertionError(error);
             }

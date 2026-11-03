@@ -753,6 +753,18 @@ public class Main extends JPanel {
 
         addLegendItem(
             legend,
+            "BR Brute",
+            new Color(78, 52, 46)
+        );
+
+        addLegendItem(
+            legend,
+            "SP Spitter",
+            new Color(104, 159, 56)
+        );
+
+        addLegendItem(
+            legend,
             "BOSS Mutant boss",
             new Color(74, 20, 140)
         );
@@ -865,6 +877,13 @@ public class Main extends JPanel {
             && secondsUntilNextWave <= 5;
     }
 
+    /** HUD wave text, for example "Wave: 3 (Stalker wave)". */
+    private static String waveLabel(int waveNumber, ZombieType featured) {
+        return featured == null
+            ? "Wave: " + waveNumber
+            : "Wave: " + waveNumber + " (" + featured.getLabel() + " wave)";
+    }
+
     /** Time remaining until the next wave. */
     private long getNextWaveSeconds() {
 
@@ -956,7 +975,7 @@ public class Main extends JPanel {
             "Survived: " + getSurvivalTime();
 
         String waveText =
-            "Wave: " + waveNumber;
+            waveLabel(waveNumber, featuredType);
 
         String nextWaveText =
             "Next wave: "
