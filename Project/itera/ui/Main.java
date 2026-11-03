@@ -210,7 +210,7 @@ public class Main extends JPanel {
                 + (i / zombieColumns) * 70;
 
             Zombie zombie = ZombieSpawns.atType(
-                i % 4,
+                i % ZombieSpawns.typeCount(),
                 x,
                 y
             );

@@ -187,6 +187,13 @@ public final class ZombieVariantChecks {
         check(typeCounts.get("Brute") == 1L && typeCounts.get("Spitter") == 2L, "Brutes and Spitters are counted");
         check(typeCounts.get("Standard") == 0L, "New types are not counted as standard zombies");
 
+        // Random spawns can produce every type
+        Random spawnRandom = new Random(7);
+        Set<ZombieType> spawned = EnumSet.noneOf(ZombieType.class);
+        for (int i = 0; i < 200; i++) spawned.add(ZombieType.of(ZombieSpawns.random(spawnRandom, 0, 0)));
+        check(spawned.equals(EnumSet.allOf(ZombieType.class)), "Random spawns include Brutes and Spitters");
+        check(ZombieSpawns.typeCount() == ZombieType.values().length, "Spawn rotation covers every type");
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }

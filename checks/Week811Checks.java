@@ -301,7 +301,7 @@ public final class Week811Checks {
         missing.addSpawnPoint(new Vector2D(1, 1));
         rejects(NullPointerException.class, () -> missing.trigger(waves));
 
-        Class<?>[] types = {Zombie.class, Runner.class, Stalker.class, Bloater.class};
+        Class<?>[] types = {Zombie.class, Runner.class, Stalker.class, Bloater.class, Brute.class, Spitter.class};
         for (int i = 0; i < types.length; i++)
             check(ZombieSpawns.atType(i, 9, 8).getClass() == types[i], "Initial type rotation " + i);
 
@@ -347,10 +347,12 @@ public final class Week811Checks {
                 check(typeLabel.getParent() != null,
                     "Zombie type summary is attached to the controls");
 
-                check(typeLabel.getText().contains("Standard: 3")
-                        && typeLabel.getText().contains("Runner: 3")
+                check(typeLabel.getText().contains("Standard: 2")
+                        && typeLabel.getText().contains("Runner: 2")
                         && typeLabel.getText().contains("Stalker: 2")
                         && typeLabel.getText().contains("Bloater: 2")
+                        && typeLabel.getText().contains("Brute: 1")
+                        && typeLabel.getText().contains("Spitter: 1")
                         && typeLabel.getText().contains("Boss: 0"),
                     "Initial UI breakdown matches the ten rotating zombie spawns");
 
