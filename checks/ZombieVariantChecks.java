@@ -111,6 +111,19 @@ public final class ZombieVariantChecks {
         check(bloater.getTargetingStrategy().chooseTarget(bloater, List.of(alone, pairA, pairB)).orElseThrow() == pairA,
             "Bloater walks towards the group");
 
+        // Brute: slow, big and armoured
+        Brute brute = new Brute(0, 0);
+        check(brute.getHealth() == 250 && brute.getMaxHealth() == 250, "Brute has 250 health");
+        check(brute.getSpeed() < new Zombie(0, 0).getSpeed() && brute.getSize() == 24, "Brute is slow and big");
+        brute.receiveGunshot();
+        check(brute.getHealth() == 225, "Armour halves a gunshot to 25");
+        brute.takeDamage(10);
+        check(brute.getHealth() == 220, "Armour halves other damage too");
+        brute.takeDamage(0);
+        check(brute.getHealth() == 220, "Zero damage still does nothing");
+        brute.takeDamage(10000);
+        check(!brute.isAlive() && brute.getHealth() == 0, "Brute can still be killed");
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }
