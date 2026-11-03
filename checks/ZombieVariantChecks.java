@@ -162,6 +162,11 @@ public final class ZombieVariantChecks {
             "Spitter reports the human it killed");
         check(new Spitter(0, 0).getMaxHealth() == 80, "Spitter is fragile");
 
+        Spitter medicHunter = new Spitter(0, 0);
+        Medic distantMedic = new Medic(300, 0);
+        check(medicHunter.getTargetingStrategy().chooseTarget(medicHunter, List.of(closeCivilian, distantMedic)).orElseThrow() == distantMedic,
+            "Spitter goes after medics first");
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }

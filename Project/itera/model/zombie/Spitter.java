@@ -2,6 +2,7 @@ package itera.model.zombie;
 
 import itera.model.*;
 import itera.model.human.*;
+import itera.model.zombie.targeting.*;
 import java.awt.*;
 import java.util.*;
 
@@ -17,6 +18,8 @@ public class Spitter extends Zombie {
         super(x, y);
         health = 80;
         speed = 1.5;
+        // Spitters take out the medics so nobody gets healed.
+        targetingStrategy = new PreferredRoleTarget<>(Medic.class, new NearestTarget());
     }
 
     @Override
