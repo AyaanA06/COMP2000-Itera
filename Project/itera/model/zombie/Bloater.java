@@ -2,6 +2,7 @@ package itera.model.zombie;
 
 import itera.model.*;
 import itera.model.human.*;
+import itera.model.zombie.targeting.*;
 import java.awt.*;
 import java.util.*;
 
@@ -14,6 +15,8 @@ public class Bloater extends Zombie {
         health = 150;
         speed = 1.0;
         size = 22;
+        // Bloaters walk into groups so the explosion hits more people.
+        targetingStrategy = new CrowdTarget();
     }
 
     public boolean shouldExplode(ArrayList<Human> humans) {

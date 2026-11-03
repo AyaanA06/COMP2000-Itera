@@ -103,6 +103,14 @@ public final class ZombieVariantChecks {
         check(crowd.chooseTarget(hunter, List.of()).isEmpty(), "No target in an empty list");
         rejects(IllegalArgumentException.class, () -> new CrowdTarget(-1));
 
+        // Bloaters head for groups
+        Bloater bloater = new Bloater(0, 0);
+        Civilian alone = new Civilian(20, 0);
+        Civilian pairA = new Civilian(300, 0);
+        Civilian pairB = new Civilian(320, 0);
+        check(bloater.getTargetingStrategy().chooseTarget(bloater, List.of(alone, pairA, pairB)).orElseThrow() == pairA,
+            "Bloater walks towards the group");
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }
