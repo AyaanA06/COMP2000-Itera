@@ -63,6 +63,15 @@ public final class ZombieVariantChecks {
         rejects(NullPointerException.class, () -> new PreferredRoleTarget<>(Soldier.class, null));
         rejects(NullPointerException.class, () -> new PreferredRoleTarget<Soldier>(null, new NearestTarget()));
 
+        // Runners go after civilians
+        Runner runner = new Runner(0, 0);
+        Soldier closeSoldier = new Soldier(10, 0);
+        Civilian farCivilian = new Civilian(150, 0);
+        check(runner.getTargetingStrategy().chooseTarget(runner, List.of(closeSoldier, farCivilian)).orElseThrow() == farCivilian,
+            "Runner skips a closer soldier for a civilian");
+        check(runner.getTargetingStrategy().chooseTarget(runner, List.of(closeSoldier)).orElseThrow() == closeSoldier,
+            "Runner falls back to the nearest human");
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }
