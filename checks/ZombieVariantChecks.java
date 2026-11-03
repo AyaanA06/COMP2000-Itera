@@ -87,6 +87,22 @@ public final class ZombieVariantChecks {
         check(stalker.getTargetingStrategy().chooseTarget(stalker, List.of(healthy, wounded)).orElseThrow() == wounded,
             "Stalker picks off the injured human");
 
+        // Biggest crowd first
+        CrowdTarget crowd = new CrowdTarget();
+        Civilian loner = new Civilian(20, 0);
+        Civilian groupA = new Civilian(400, 0);
+        Civilian groupB = new Civilian(420, 0);
+        Civilian groupC = new Civilian(400, 30);
+        List<Human> crowdScene = List.of(loner, groupA, groupB, groupC);
+        check(crowd.getRadius() == CrowdTarget.DEFAULT_RADIUS, "Default crowd radius");
+        check(crowd.chooseTarget(hunter, crowdScene).orElseThrow() == groupA, "Picks the human in the middle of the group");
+        check(new CrowdTarget(0).chooseTarget(hunter, crowdScene).orElseThrow() == loner, "No crowds means the nearest human");
+        injured(groupA, 100);
+        injured(groupB, 100);
+        check(crowd.chooseTarget(hunter, crowdScene).orElseThrow() == loner, "Dead humans do not make a crowd");
+        check(crowd.chooseTarget(hunter, List.of()).isEmpty(), "No target in an empty list");
+        rejects(IllegalArgumentException.class, () -> new CrowdTarget(-1));
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }
