@@ -7,6 +7,7 @@ import itera.model.human.*;
 import itera.model.zombie.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.function.Predicate;
 
 public class World {
@@ -272,61 +273,31 @@ public class World {
                 Collectors.counting()
             ));
 
-        // Maintain a consistent order for the interface.
+        // Maintain a consistent order for the interface:
+        // every ZombieType in enum order, then the boss.
         Map<String, Long> counts = new LinkedHashMap<>();
 
-        counts.put(
-            "Standard",
-            totals.getOrDefault("Standard", 0L)
-        );
-
-        counts.put(
-            "Runner",
-            totals.getOrDefault("Runner", 0L)
-        );
-
-        counts.put(
-            "Stalker",
-            totals.getOrDefault("Stalker", 0L)
-        );
-
-        counts.put(
-            "Bloater",
-            totals.getOrDefault("Bloater", 0L)
-        );
-
-        counts.put(
-            "Boss",
-            totals.getOrDefault("Boss", 0L)
-        );
+        Stream.concat(
+                Arrays.stream(ZombieType.values()).map(ZombieType::getLabel),
+                Stream.of(BOSS_LABEL))
+            .forEach(label -> counts.put(label, totals.getOrDefault(label, 0L)));
 
         return Collections.unmodifiableMap(counts);
     }
 
+    private static final String BOSS_LABEL = "Boss";
+
     /**
      * Identify the correct zombie type.
      *
-     * Bosses and specialised zombies are checked
-     * before falling back to the standard zombie type.
+     * The boss is not a ZombieType, so it is checked first.
      */
     private static String zombieTypeLabel(Zombie zombie) {
 
         if (zombie instanceof MutantBoss) {
-            return "Boss";
+            return BOSS_LABEL;
         }
 
-        if (zombie instanceof Runner) {
-            return "Runner";
-        }
-
-        if (zombie instanceof Stalker) {
-            return "Stalker";
-        }
-
-        if (zombie instanceof Bloater) {
-            return "Bloater";
-        }
-
-        return "Standard";
+        return ZombieType.of(zombie).getLabel();
     }
 }

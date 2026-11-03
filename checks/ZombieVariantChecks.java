@@ -4,6 +4,7 @@ import itera.model.*;
 import itera.model.human.*;
 import itera.model.zombie.*;
 import itera.model.zombie.targeting.*;
+import itera.simulation.*;
 import java.util.*;
 
 /** Standalone checks for zombie types and how they choose targets. */
@@ -176,6 +177,15 @@ public final class ZombieVariantChecks {
         check(ZombieType.BRUTE.getLabel().equals("Brute") && ZombieType.STANDARD.getLabel().equals("Standard"), "Display labels");
         check(ZombieType.SPITTER.create(0, 0) instanceof Spitter, "Spitter factory");
         rejects(IllegalArgumentException.class, () -> ZombieType.of(new MutantBoss(0, 0)));
+
+        // The live breakdown knows about the new types
+        World typeWorld = new World();
+        typeWorld.addCharacter(new Brute(10, 10));
+        typeWorld.addCharacter(new Spitter(20, 20));
+        typeWorld.addCharacter(new Spitter(30, 30));
+        Map<String, Long> typeCounts = typeWorld.getLivingZombieTypeCounts();
+        check(typeCounts.get("Brute") == 1L && typeCounts.get("Spitter") == 2L, "Brutes and Spitters are counted");
+        check(typeCounts.get("Standard") == 0L, "New types are not counted as standard zombies");
 
         System.out.println("Passed " + checks + " zombie variant checks.");
     }

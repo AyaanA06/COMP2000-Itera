@@ -190,7 +190,7 @@ public final class Week811Checks {
         Map<String, Long> emptyTypeCounts = typeWorld.getLivingZombieTypeCounts();
 
         check(new ArrayList<>(emptyTypeCounts.keySet()).equals(
-                List.of("Standard", "Runner", "Stalker", "Bloater", "Boss")),
+                List.of("Standard", "Runner", "Stalker", "Bloater", "Brute", "Spitter", "Boss")),
             "Zombie breakdown includes every type in display order");
 
         check(emptyTypeCounts.values().stream().allMatch(count -> count == 0L),
@@ -231,6 +231,9 @@ public final class Week811Checks {
 
         check(mixedTypeCounts.get("Boss") == 1L,
             "Counts mutant bosses separately");
+
+        check(mixedTypeCounts.get("Brute") == 0L && mixedTypeCounts.get("Spitter") == 0L,
+            "New types show zero until they spawn");
 
         check(mixedTypeCounts.values().stream().mapToLong(Long::longValue).sum() == 5L,
             "Breakdown totals only the five living zombies, not humans");
