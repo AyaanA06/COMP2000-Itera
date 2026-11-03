@@ -124,6 +124,12 @@ public final class ZombieVariantChecks {
         brute.takeDamage(10000);
         check(!brute.isAlive() && brute.getHealth() == 0, "Brute can still be killed");
 
+        Brute soldierHunter = new Brute(0, 0);
+        Civilian closeCivilian = new Civilian(10, 0);
+        Soldier distantSoldier = new Soldier(250, 0);
+        check(soldierHunter.getTargetingStrategy().chooseTarget(soldierHunter, List.of(closeCivilian, distantSoldier)).orElseThrow() == distantSoldier,
+            "Brute goes after soldiers first");
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }

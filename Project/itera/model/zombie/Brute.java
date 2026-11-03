@@ -1,5 +1,7 @@
 package itera.model.zombie;
 
+import itera.model.human.*;
+import itera.model.zombie.targeting.*;
 import java.awt.*;
 
 /** A slow, heavily armoured zombie that only takes half damage. */
@@ -11,6 +13,8 @@ public class Brute extends Zombie {
         health = BRUTE_HEALTH;
         speed = 1.2;
         size = 24;
+        // Brutes walk straight at the soldiers to soak up their bullets.
+        targetingStrategy = new PreferredRoleTarget<>(Soldier.class, new NearestTarget());
     }
 
     /** Armour halves every hit, so a 50 damage gunshot only does 25. */
