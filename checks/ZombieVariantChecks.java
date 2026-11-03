@@ -194,6 +194,19 @@ public final class ZombieVariantChecks {
         check(spawned.equals(EnumSet.allOf(ZombieType.class)), "Random spawns include Brutes and Spitters");
         check(ZombieSpawns.typeCount() == ZombieType.values().length, "Spawn rotation covers every type");
 
+        // Featured type for each wave
+        check(WaveRotation.featuredFor(1).orElseThrow() == ZombieType.RUNNER, "Wave 1 features Runners");
+        check(WaveRotation.featuredFor(2).orElseThrow() == ZombieType.STALKER, "Wave 2 features Stalkers");
+        check(WaveRotation.featuredFor(4).orElseThrow() == ZombieType.BRUTE, "Wave 4 features Brutes");
+        check(WaveRotation.isBossWave(5) && WaveRotation.featuredFor(5).isEmpty(), "Boss waves have no featured type");
+        check(WaveRotation.featuredFor(6).orElseThrow() == ZombieType.SPITTER, "Spitters still get a turn after the boss");
+        check(WaveRotation.featuredFor(7).orElseThrow() == ZombieType.RUNNER, "Rotation starts again");
+        Set<ZombieType> featured = EnumSet.noneOf(ZombieType.class);
+        for (int wave = 1; wave <= 30; wave++) WaveRotation.featuredFor(wave).ifPresent(featured::add);
+        check(featured.equals(EnumSet.complementOf(EnumSet.of(ZombieType.STANDARD))), "Every special type is featured, standard never is");
+        rejects(IllegalArgumentException.class, () -> WaveRotation.featuredFor(0));
+        rejects(IllegalArgumentException.class, () -> WaveRotation.isBossWave(-3));
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }
