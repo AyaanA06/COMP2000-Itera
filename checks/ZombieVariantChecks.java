@@ -50,6 +50,19 @@ public final class ZombieVariantChecks {
             .findFirst());
         check(zombie.getTargetingStrategy().chooseTarget(zombie, humans).orElseThrow() == far, "Lambda strategy picks the soldier");
 
+        // Preferred role, with a fallback when that role is gone
+        PreferredRoleTarget<Soldier> soldiersFirst = new PreferredRoleTarget<>(Soldier.class, new NearestTarget());
+        Zombie hunter = new Zombie(0, 0);
+        check(soldiersFirst.getRole() == Soldier.class, "Role is stored");
+        check(soldiersFirst.chooseTarget(hunter, humans).orElseThrow() == far, "Preferred role beats a closer human");
+        Soldier nearSoldier = new Soldier(50, 0);
+        check(soldiersFirst.chooseTarget(hunter, List.of(far, near, nearSoldier)).orElseThrow() == nearSoldier, "Nearest of the preferred role");
+        check(soldiersFirst.chooseTarget(hunter, List.of(near, dead)).orElseThrow() == near, "Falls back when no soldiers are left");
+        Soldier deadSoldier = injured(new Soldier(1, 0), 100);
+        check(soldiersFirst.chooseTarget(hunter, List.of(deadSoldier, near)).orElseThrow() == near, "Dead soldiers do not count");
+        rejects(NullPointerException.class, () -> new PreferredRoleTarget<>(Soldier.class, null));
+        rejects(NullPointerException.class, () -> new PreferredRoleTarget<Soldier>(null, new NearestTarget()));
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }
