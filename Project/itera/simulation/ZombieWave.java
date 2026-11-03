@@ -38,6 +38,33 @@ public class ZombieWave {
         return (x, y) -> ZombieSpawns.random(random, x, y);
     }
 
+    /** Share of a featured wave that is the featured type; the rest are random. */
+    public static final double FEATURED_SHARE = 0.6;
+
+    private ZombieType featuredType;
+
+    /**
+     * A normal wave where most zombies are the featured type,
+     * for example a "Stalker wave".
+     */
+    public static ZombieWave featuring(int count, ZombieType featured, Random random) {
+        Objects.requireNonNull(featured, "Featured type is required");
+        Objects.requireNonNull(random, "Random is required");
+
+        ZombieWave wave = new ZombieWave(count, false, (x, y) ->
+            random.nextDouble() < FEATURED_SHARE
+                ? featured.create(x, y)
+                : ZombieSpawns.random(random, x, y));
+        wave.featuredType = featured;
+
+        return wave;
+    }
+
+    /** The featured type, or empty for boss waves and plain random waves. */
+    public Optional<ZombieType> getFeaturedType() {
+        return Optional.ofNullable(featuredType);
+    }
+
     public void addSpawnPoint(Vector2D point) {
 
         spawnPoints.add(point);

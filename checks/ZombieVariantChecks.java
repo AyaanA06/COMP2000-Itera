@@ -207,6 +207,21 @@ public final class ZombieVariantChecks {
         rejects(IllegalArgumentException.class, () -> WaveRotation.featuredFor(0));
         rejects(IllegalArgumentException.class, () -> WaveRotation.isBossWave(-3));
 
+        // Featured waves
+        ZombieWave stalkerWave = ZombieWave.featuring(100, ZombieType.STALKER, new Random(11));
+        check(stalkerWave.getFeaturedType().orElseThrow() == ZombieType.STALKER && !stalkerWave.isBossWave(), "Wave remembers its featured type");
+        World waveWorld = new World();
+        stalkerWave.addSpawnPoint(new Vector2D(100, 100));
+        waveWorld.spawnWave(stalkerWave);
+        long stalkers = waveWorld.getZombies().stream().filter(z -> ZombieType.of(z) == ZombieType.STALKER).count();
+        check(waveWorld.getZombies().size() == 100, "Featured wave spawns the full count");
+        check(stalkers >= 55 && stalkers <= 80, "Most of the wave is the featured type (" + stalkers + ")");
+        check(waveWorld.getZombies().stream().anyMatch(z -> ZombieType.of(z) != ZombieType.STALKER), "The rest of the wave is mixed");
+        check(new ZombieWave(3).getFeaturedType().isEmpty() && new ZombieWave(1, true).getFeaturedType().isEmpty(),
+            "Plain and boss waves have no featured type");
+        rejects(NullPointerException.class, () -> ZombieWave.featuring(3, null, new Random()));
+        rejects(IllegalArgumentException.class, () -> ZombieWave.featuring(-1, ZombieType.BRUTE, new Random()));
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }
