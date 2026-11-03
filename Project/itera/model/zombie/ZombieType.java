@@ -6,6 +6,20 @@ import java.util.function.BiFunction;
 /**
  * Every ordinary zombie type, with its display label and constructor.
  * The Mutant Boss is not listed because it only appears in boss waves.
+ *
+ * <pre>
+ * Type      Feature                                  Targets first
+ * Standard  basic melee zombie                       nearest human
+ * Runner    sprints, bursts of speed when close      civilians
+ * Stalker   ambush hits for extra damage             the weakest (lowest health) human
+ * Bloater   explodes and hurts everyone nearby       the biggest group of humans
+ * Brute     250 health, armour halves all damage     soldiers
+ * Spitter   stops at range and spits acid            medics
+ * </pre>
+ *
+ * Targeting is done with a TargetingStrategy (see the targeting package).
+ * Every normal wave features one type (except Standard) in rotation,
+ * see WaveRotation and ZombieWave.featuring.
  */
 public enum ZombieType {
     STANDARD("Standard", Zombie.class, Zombie::new),
