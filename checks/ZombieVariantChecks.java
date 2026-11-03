@@ -82,6 +82,11 @@ public final class ZombieVariantChecks {
         Civilian dying = injured(new Civilian(1, 0), 100);
         check(weakest.chooseTarget(hunter, List.of(dying, healthy)).orElseThrow() == healthy, "Dead humans are not the weakest");
 
+        // Stalkers go after the injured
+        Stalker stalker = new Stalker(0, 0);
+        check(stalker.getTargetingStrategy().chooseTarget(stalker, List.of(healthy, wounded)).orElseThrow() == wounded,
+            "Stalker picks off the injured human");
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }
