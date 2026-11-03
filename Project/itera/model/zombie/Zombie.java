@@ -4,6 +4,7 @@ package itera.model.zombie;
 import itera.model.*;
 import itera.model.Character;
 import itera.model.human.*;
+import itera.model.zombie.targeting.*;
 import java.awt.*;
 import java.util.*;
 
@@ -22,6 +23,17 @@ public class Zombie extends Character {
 
     protected double detectionRange = 500;
 
+    /** Decides which human this zombie goes after. */
+    protected TargetingStrategy targetingStrategy = new NearestTarget();
+
+    public TargetingStrategy getTargetingStrategy() {
+        return targetingStrategy;
+    }
+
+    public void setTargetingStrategy(TargetingStrategy targetingStrategy) {
+        this.targetingStrategy = Objects.requireNonNull(targetingStrategy, "Targeting strategy is required");
+    }
+
     protected static final int DAMAGE = 25;
     protected static final double ATTACK_DISTANCE = 20;
 
@@ -30,7 +42,7 @@ public class Zombie extends Character {
     }
 
     /**
-     * Moves towards or attacks the nearest eligible human.
+     * Moves towards or attacks the human chosen by the targeting strategy.
      */
     public Human update(
             int worldWidth,
@@ -42,7 +54,7 @@ public class Zombie extends Character {
             return null;
         }
 
-        Human target = findClosestHuman(humans);
+        Human target = findTarget(humans);
 
         if (target == null || target.isSheltered()) {
             return null;
@@ -99,26 +111,8 @@ public class Zombie extends Character {
         return null;
     }
 
-    protected Human findClosestHuman(ArrayList<Human> humans) {
-
-        Human closest = null;
-        double closestDistance = Double.MAX_VALUE;
-
-        for (Human human : humans) {
-
-            if (!human.isAlive() || human.isSheltered()) {
-                continue;
-            }
-
-            double distance = position.distanceTo(human.getPosition());
-
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closest = human;
-            }
-        }
-
-        return closest;
+    protected Human findTarget(ArrayList<Human> humans) {
+        return targetingStrategy.chooseTarget(this, humans).orElse(null);
     }
 
     protected boolean performAttack(Human target) {

@@ -190,7 +190,7 @@ public final class Week811Checks {
         Map<String, Long> emptyTypeCounts = typeWorld.getLivingZombieTypeCounts();
 
         check(new ArrayList<>(emptyTypeCounts.keySet()).equals(
-                List.of("Standard", "Runner", "Stalker", "Bloater", "Boss")),
+                List.of("Standard", "Runner", "Stalker", "Bloater", "Brute", "Spitter", "Boss")),
             "Zombie breakdown includes every type in display order");
 
         check(emptyTypeCounts.values().stream().allMatch(count -> count == 0L),
@@ -231,6 +231,9 @@ public final class Week811Checks {
 
         check(mixedTypeCounts.get("Boss") == 1L,
             "Counts mutant bosses separately");
+
+        check(mixedTypeCounts.get("Brute") == 0L && mixedTypeCounts.get("Spitter") == 0L,
+            "New types show zero until they spawn");
 
         check(mixedTypeCounts.values().stream().mapToLong(Long::longValue).sum() == 5L,
             "Breakdown totals only the five living zombies, not humans");
@@ -298,7 +301,7 @@ public final class Week811Checks {
         missing.addSpawnPoint(new Vector2D(1, 1));
         rejects(NullPointerException.class, () -> missing.trigger(waves));
 
-        Class<?>[] types = {Zombie.class, Runner.class, Stalker.class, Bloater.class};
+        Class<?>[] types = {Zombie.class, Runner.class, Stalker.class, Bloater.class, Brute.class, Spitter.class};
         for (int i = 0; i < types.length; i++)
             check(ZombieSpawns.atType(i, 9, 8).getClass() == types[i], "Initial type rotation " + i);
 
@@ -344,10 +347,12 @@ public final class Week811Checks {
                 check(typeLabel.getParent() != null,
                     "Zombie type summary is attached to the controls");
 
-                check(typeLabel.getText().contains("Standard: 3")
-                        && typeLabel.getText().contains("Runner: 3")
+                check(typeLabel.getText().contains("Standard: 2")
+                        && typeLabel.getText().contains("Runner: 2")
                         && typeLabel.getText().contains("Stalker: 2")
                         && typeLabel.getText().contains("Bloater: 2")
+                        && typeLabel.getText().contains("Brute: 1")
+                        && typeLabel.getText().contains("Spitter: 1")
                         && typeLabel.getText().contains("Boss: 0"),
                     "Initial UI breakdown matches the ten rotating zombie spawns");
 

@@ -48,6 +48,9 @@ public class Main extends JPanel {
     private long lastWaveTime;
     private int waveNumber = 1;
 
+    // Zombie type leading the current wave, or null for the first and boss waves.
+    private ZombieType featuredType;
+
     private final JLabel populationSummary =
         new JLabel(" ", SwingConstants.CENTER);
 
@@ -210,7 +213,7 @@ public class Main extends JPanel {
                 + (i / zombieColumns) * 70;
 
             Zombie zombie = ZombieSpawns.atType(
-                i % 4,
+                i % ZombieSpawns.typeCount(),
                 x,
                 y
             );
@@ -383,7 +386,7 @@ public class Main extends JPanel {
         waveNumber++;
 
         boolean bossWave =
-            waveNumber % 5 == 0;
+            WaveRotation.isBossWave(waveNumber);
 
         ZombieWave wave;
 
@@ -401,11 +404,15 @@ public class Main extends JPanel {
                     + (waveNumber - 1)
                     * ZOMBIES_ADDED_PER_WAVE;
 
-            wave = new ZombieWave(
+            // Each normal wave is led by a different zombie type.
+            wave = ZombieWave.featuring(
                 zombiesThisWave,
-                false
+                WaveRotation.featuredFor(waveNumber).orElseThrow(),
+                random
             );
         }
+
+        featuredType = wave.getFeaturedType().orElse(null);
 
         // SPAWN POINTS
         wave.addSpawnPoint(
@@ -746,6 +753,18 @@ public class Main extends JPanel {
 
         addLegendItem(
             legend,
+            "BR Brute",
+            new Color(78, 52, 46)
+        );
+
+        addLegendItem(
+            legend,
+            "SP Spitter",
+            new Color(104, 159, 56)
+        );
+
+        addLegendItem(
+            legend,
             "BOSS Mutant boss",
             new Color(74, 20, 140)
         );
@@ -858,6 +877,13 @@ public class Main extends JPanel {
             && secondsUntilNextWave <= 5;
     }
 
+    /** HUD wave text, for example "Wave: 3 (Stalker wave)". */
+    private static String waveLabel(int waveNumber, ZombieType featured) {
+        return featured == null
+            ? "Wave: " + waveNumber
+            : "Wave: " + waveNumber + " (" + featured.getLabel() + " wave)";
+    }
+
     /** Time remaining until the next wave. */
     private long getNextWaveSeconds() {
 
@@ -949,7 +975,7 @@ public class Main extends JPanel {
             "Survived: " + getSurvivalTime();
 
         String waveText =
-            "Wave: " + waveNumber;
+            waveLabel(waveNumber, featuredType);
 
         String nextWaveText =
             "Next wave: "

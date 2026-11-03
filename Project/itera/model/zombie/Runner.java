@@ -2,6 +2,7 @@ package itera.model.zombie;
 
 import itera.model.*;
 import itera.model.human.*;
+import itera.model.zombie.targeting.*;
 import java.awt.*;
 import java.util.*;
 
@@ -20,6 +21,8 @@ public class Runner extends Zombie {
     public Runner(int x, int y) {
         super(x, y);
         sprint();
+        // Runners chase down civilians, who cannot fight back.
+        targetingStrategy = new PreferredRoleTarget<>(Civilian.class, new NearestTarget());
     }
 
     public void sprint() {
@@ -29,7 +32,7 @@ public class Runner extends Zombie {
     @Override
     public Human update(int worldWidth, int worldHeight, ArrayList<Human> humans, SafePoint safePoint) {
         long now = now();
-        Human target = findClosestHuman(humans);
+        Human target = findTarget(humans);
 
         if (target != null) {
             double distance = position.distanceTo(target.getPosition());
