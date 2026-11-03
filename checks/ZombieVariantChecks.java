@@ -1,5 +1,6 @@
 package itera.checks;
 
+import itera.model.*;
 import itera.model.human.*;
 import itera.model.zombie.*;
 import itera.model.zombie.targeting.*;
@@ -129,6 +130,37 @@ public final class ZombieVariantChecks {
         Soldier distantSoldier = new Soldier(250, 0);
         check(soldierHunter.getTargetingStrategy().chooseTarget(soldierHunter, List.of(closeCivilian, distantSoldier)).orElseThrow() == distantSoldier,
             "Brute goes after soldiers first");
+
+        // Spitter: ranged acid with a cooldown
+        long[] clock = {10000};
+        SafePoint farSafePoint = new SafePoint(2000, 2000, 50, 50, 10);
+        Spitter spitter = new Spitter(0, 0);
+        spitter.setTimeSource(() -> clock[0]);
+        Civilian victim = new Civilian(100, 0);
+        victim.setTimeSource(() -> clock[0]);
+        ArrayList<Human> targets = new ArrayList<>(List.of(victim));
+        spitter.update(800, 600, targets, farSafePoint);
+        check(victim.getHealth() == 100 - Spitter.SPIT_DAMAGE, "Spitter hits from range");
+        check(spitter.getX() == 0 && spitter.getY() == 0, "Spitter stands still while spitting");
+        clock[0] = 11000;
+        spitter.update(800, 600, targets, farSafePoint);
+        check(victim.getHealth() == 100 - Spitter.SPIT_DAMAGE, "Spitter waits for its cooldown");
+        clock[0] = 11500;
+        spitter.update(800, 600, targets, farSafePoint);
+        check(victim.getHealth() == 100 - 2 * Spitter.SPIT_DAMAGE, "Spitter spits again after the cooldown");
+
+        Civilian outOfRange = new Civilian(400, 0);
+        Spitter walker = new Spitter(0, 0);
+        walker.update(800, 600, new ArrayList<>(List.of(outOfRange)), farSafePoint);
+        check(outOfRange.getHealth() == 100 && walker.getX() > 0, "Spitter walks closer when out of range");
+
+        Civilian finished = injured(new Civilian(100, 0), 90);
+        finished.setTimeSource(() -> clock[0]);
+        Spitter finisher = new Spitter(0, 0);
+        finisher.setTimeSource(() -> clock[0]);
+        check(finisher.update(800, 600, new ArrayList<>(List.of(finished)), farSafePoint) == finished,
+            "Spitter reports the human it killed");
+        check(new Spitter(0, 0).getMaxHealth() == 80, "Spitter is fragile");
 
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
