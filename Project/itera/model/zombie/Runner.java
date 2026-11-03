@@ -29,7 +29,7 @@ public class Runner extends Zombie {
     @Override
     public Human update(int worldWidth, int worldHeight, ArrayList<Human> humans, SafePoint safePoint) {
         long now = now();
-        Human target = findClosestHuman(humans);
+        Human target = findTarget(humans);
 
         if (target != null) {
             double distance = position.distanceTo(target.getPosition());
