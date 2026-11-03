@@ -167,6 +167,16 @@ public final class ZombieVariantChecks {
         check(medicHunter.getTargetingStrategy().chooseTarget(medicHunter, List.of(closeCivilian, distantMedic)).orElseThrow() == distantMedic,
             "Spitter goes after medics first");
 
+        // ZombieType enum
+        check(ZombieType.values().length == 6, "Six ordinary zombie types");
+        for (ZombieType type : ZombieType.values()) {
+            Zombie made = type.create(7, 9);
+            check(ZombieType.of(made) == type && made.getX() == 7 && made.getY() == 9, "Factory and lookup agree for " + type);
+        }
+        check(ZombieType.BRUTE.getLabel().equals("Brute") && ZombieType.STANDARD.getLabel().equals("Standard"), "Display labels");
+        check(ZombieType.SPITTER.create(0, 0) instanceof Spitter, "Spitter factory");
+        rejects(IllegalArgumentException.class, () -> ZombieType.of(new MutantBoss(0, 0)));
+
         System.out.println("Passed " + checks + " zombie variant checks.");
     }
 }
